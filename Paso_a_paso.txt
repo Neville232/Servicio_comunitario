@@ -1,0 +1,9 @@
+
+
+
+mkdir NodeJS
+cd NodeJS
+npm init -y
+
+cd NodeJS
+node server.js
