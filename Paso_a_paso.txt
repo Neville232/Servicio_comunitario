@@ -7,3 +7,6 @@ npm init -y
 
 cd NodeJS
 node server.js
+
+git config --global user.name "Neville232"
+git config --global user.email "nelvinson2000@gmail.com"

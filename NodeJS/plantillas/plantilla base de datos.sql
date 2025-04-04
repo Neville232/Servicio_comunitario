@@ -21,7 +21,7 @@ CREATE TABLE alumnos (
     apellidos VARCHAR(255) NOT NULL,
     expediente INT NOT NULL UNIQUE,
     cedula INT NOT NULL UNIQUE,
-    telefono INT NOT NULL,
+    telefono VARCHAR(11) NOT NULL,
     correo VARCHAR(255) NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     semestre INT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE empleados (
     nombres VARCHAR(255) NOT NULL,
     apellidos VARCHAR(255) NOT NULL,
     cedula INT NOT NULL UNIQUE,
-    telefono INT NOT NULL,
+    telefono VARCHAR(11) NOT NULL,
     correo VARCHAR(255) NOT NULL,
     direccion VARCHAR(255) NOT NULL,
     cargo VARCHAR(255) NOT NULL, -- Cargo del empleado (para permisos)
