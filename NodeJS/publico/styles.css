@@ -1,117 +1,105 @@
+/* Estilos base */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
+    align-items: flex-start;
 }
 
-.login-container {
-    background: #fff;
+/* Contenedor principal responsivo */
+.form-container {
+    width: 100%;
+    max-width: 500px; /* Reducido para mejor lectura en línea */
     padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
+    margin: 20px 0;
 }
 
 h1 {
+    text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
     color: #333;
 }
 
-label {
-    display: block;
-    margin: 10px 0 5px;
-    font-size: 14px;
-    color: #555;
-}
-
-input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-#resultado {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #333;
-}
-
-/* Contenedor principal del formulario */
-.form-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Título del formulario */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Estilo para el formulario en dos columnas */
-.form-grid {
-    display: flex;
-    gap: 20px;
-}
-
-/* Columnas del formulario */
-.form-column {
-    flex: 1;
+/* Estructura apilada */
+.form-stacked {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Estilo para los inputs y selects */
-input, select, button {
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Elementos del formulario */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+input, select {
     width: 100%;
     padding: 10px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: border-box;
 }
 
-/* Botón de registrar */
+/* Botón de acción */
 button {
-    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
     background-color: #007bff;
     color: white;
     border: none;
-    cursor: pointer;
-    padding: 10px;
-    font-size: 16px;
     border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+/* Mensaje de resultado */
+#resultado {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .form-container {
+        padding: 15px;
+        margin: 10px 0;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    input, select, button {
+        padding: 8px;
+    }
 }

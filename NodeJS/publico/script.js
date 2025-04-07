@@ -29,10 +29,29 @@ if (document.getElementById('registroForm')) {
                 <input type="text" id="direccion" name="direccion" required>
 
                 <label for="semestre">Semestre:</label>
-                <input type="number" id="semestre" name="semestre" required>
+                <select id="semestre" name="semestre" required>
+                    <option value="">Seleccione...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
 
                 <label for="carrera">Carrera:</label>
-                <input type="text" id="carrera" name="carrera" required>
+                <select id="carrera" name="carrera" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Ingeniería Mecatrónica">Ingeniería mecatrónica</option>
+                    <option value="Ingeniería en equipos ferroviarios">Ingeniería en equipos ferroviarios</option>
+                    <option value="Tecnico en construccion civil">Tecnico en construccion civil</option>
+                    <option value="Tecnico en electronica">Tecnico en electronica</option>
+                    <option value="Tecnico en mecanica">Tecnico en mecanica</option>
+                </select>
             `;
         } else if (tipo === 'empleado') {
             camposAdicionales.innerHTML = `
@@ -55,7 +74,13 @@ if (document.getElementById('registroForm')) {
                 <input type="text" id="direccion" name="direccion" required>
 
                 <label for="cargo">Cargo:</label>
-                <input type="text" id="cargo" name="cargo" required>
+                <select id="cargo" name="cargo" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Profesor">Profesor</option>
+                    <option value="Secretario">Secretario</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                </select>
             `;
         }
     });

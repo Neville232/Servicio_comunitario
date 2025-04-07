@@ -9,9 +9,9 @@
 <body>
     <div class="form-container">
         <h1>Registrar Usuario</h1>
-        <form id="registroForm" class="form-grid">
-            <!-- Columna 1: Formulario base -->
-            <div class="form-column">
+        <form id="registroForm" class="form-stacked">
+            <!-- Todos los elementos en un solo flujo vertical -->
+            <div class="form-section">
                 <label for="usuario">Usuario:</label>
                 <input type="text" id="usuario" name="usuario" required>
 
@@ -29,8 +29,8 @@
                 </select>
             </div>
 
-            <!-- Columna 2: Campos adicionales -->
-            <div id="camposAdicionales" class="form-column"></div>
+            <!-- Sección de campos adicionales -->
+            <div id="camposAdicionales" class="form-section"></div>
         </form>
         <button type="submit" form="registroForm">Registrar</button>
         <div id="resultado"></div>
