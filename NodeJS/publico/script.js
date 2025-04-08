@@ -46,7 +46,7 @@ if (document.getElementById('registroForm')) {
                 <label for="carrera">Carrera:</label>
                 <select id="carrera" name="carrera" required>
                     <option value="">Seleccione...</option>
-                    <option value="Ingeniería Mecatrónica">Ingeniería Mecatrónica</option>
+                    <option value="Ingeniería mecatrónica">Ingeniería mecatrónica</option>
                     <option value="Ingeniería en equipos ferroviarios">Ingeniería en equipos ferroviarios</option>
                     <option value="TSU en construcción civil">TSU en construcción civil</option>
                     <option value="TSU en electricidad">TSU en electricidad</option>

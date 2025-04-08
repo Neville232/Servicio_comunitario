@@ -84,22 +84,69 @@ button:hover {
     text-align: center;
 }
 
-/* Media Queries para responsividad */
+/* Contenedor de las cards */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas */
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Estilo de las cards */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card h2 {
+    font-size: 18px;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Barra de búsqueda */
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Responsividad */
+@media (max-width: 1200px) {
+    .card-container {
+        grid-template-columns: repeat(4, 1fr); /* 4 columnas en pantallas medianas */
+    }
+}
+
+@media (max-width: 768px) {
+    .card-container {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+    }
+}
+
 @media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
-    
-    .form-container {
-        padding: 15px;
-        margin: 10px 0;
-    }
-    
-    h1 {
-        font-size: 20px;
-    }
-    
-    input, select, button {
-        padding: 8px;
+    .card-container {
+        grid-template-columns: repeat(1, 1fr); /* 1 columna en celulares */
     }
 }
