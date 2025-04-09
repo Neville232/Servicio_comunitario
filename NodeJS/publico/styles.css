@@ -132,6 +132,63 @@ button:hover {
     box-sizing: border-box;
 }
 
+/* Estilos específicos para la interfaz de registro de libros */
+.registrar-libros h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.registrar-libros .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.registrar-libros label {
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+}
+
+.registrar-libros input, 
+.registrar-libros select, 
+.registrar-libros textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.registrar-libros textarea {
+    resize: none;
+}
+
+.registrar-libros button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.registrar-libros button:hover {
+    background-color: #0056b3;
+}
+
+.registrar-libros #resultado {
+    margin-top: 15px;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+
 /* Responsividad */
 @media (max-width: 1200px) {
     .card-container {
