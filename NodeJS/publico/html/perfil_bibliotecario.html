@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Bibliotecario</title>
+    <link rel="stylesheet" href="../css/perfil_bibliotecario.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+            <h2>Biblioteca</h2>
+            <nav>
+                <ul>
+                    <li><button onclick="location.href='registrar_libros.html'">Registrar Libros</button></li>
+                    <li><button onclick="location.href='editar_libros.html'">Editar Libros</button></li>
+                    <li><button onclick="location.href='registrar_prestamos.html'">Registrar Préstamos</button></li>
+                    <li><button onclick="location.href='visualizar_prestamos.html'">Visualizar Préstamos</button></li>
+                    <li><button onclick="location.href='registrar_usuarios.html'">Registrar Alumnos</button></li>
+                    <li><button onclick="location.href='editar_usuarios.html'">Editar Alumnos</button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <header>
+                <h1>Bienvenido, Bibliotecario</h1>
+            </header>
+
+            <!-- Widgets con estadísticas -->
+            <section class="widgets">
+                <div class="widget">
+                    <h3>Libros Prestados Hoy</h3>
+                    <p>25</p>
+                </div>
+                <div class="widget">
+                    <h3>Préstamos Pendientes</h3>
+                    <p>12</p>
+                </div>
+                <div class="widget">
+                    <h3>Alumnos Registrados</h3>
+                    <p>150</p>
+                </div>
+            </section>
+
+            <!-- Botones principales -->
+            <section class="actions">
+                <button onclick="location.href='registrar_libros.html'" class="action-button">Registrar Libros</button>
+                <button onclick="location.href='editar_libros.html'" class="action-button">Editar Libros</button>
+                <button onclick="location.href='registrar_prestamos.html'" class="action-button">Registrar Préstamos</button>
+                <button onclick="location.href='visualizar_prestamos.html'" class="action-button">Visualizar Préstamos</button>
+                <button onclick="location.href='registrar_usuarios.html'" class="action-button">Registrar Alumnos</button>
+                <button onclick="location.href='editar_usuarios.html'" class="action-button">Editar Alumnos</button>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

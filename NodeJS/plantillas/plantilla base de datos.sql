@@ -56,7 +56,7 @@ CREATE TABLE asistencia_de_empleados (
 -- Crear la tabla de libros (independiente de las demás)
 CREATE TABLE libros (
     libros_id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
     autores VARCHAR(255) NOT NULL,
     materia VARCHAR(255) NOT NULL,
     edicion INT NOT NULL,

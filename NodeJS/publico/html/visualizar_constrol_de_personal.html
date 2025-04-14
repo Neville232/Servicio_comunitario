@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Personal</title>
+    <link rel="stylesheet" href="../css/visualizar_constrol_de_personal.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Control de Personal</h1>
+        
+        <!-- Barra de búsqueda -->
+        <input type="text" id="searchBar" placeholder="Buscar por nombre, apellido o fechas..." class="search-bar">
+
+        <div class="card-container">
+            <!-- Ejemplo de Card -->
+            <div class="card">
+                <h2>Empleado: Juan Pérez</h2>
+                <p><strong>Fecha de Ingreso:</strong> 2025-04-13</p>
+                <p><strong>Hora de Ingreso:</strong> 08:00 AM</p>
+                <p><strong>Fecha de Salida:</strong> 2025-04-13</p>
+                <p><strong>Hora de Salida:</strong> 05:00 PM</p>
+            </div>
+            <!-- Más cards se generarán dinámicamente -->
+        </div>
+    </div>
+
+    <script>
+        // Función para eliminar tildes y normalizar texto
+        function normalizeText(text) {
+            return text
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
+        }
+
+        // Función para filtrar las cards
+        document.getElementById('searchBar').addEventListener('input', function () {
+            const searchTerm = normalizeText(this.value);
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const empleado = normalizeText(card.querySelector('h2').textContent);
+                const fechaIngreso = normalizeText(card.querySelector('p:nth-of-type(1)').textContent);
+                const fechaSalida = normalizeText(card.querySelector('p:nth-of-type(3)').textContent);
+
+                if (empleado.includes(searchTerm) || fechaIngreso.includes(searchTerm) || fechaSalida.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

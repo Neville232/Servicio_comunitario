@@ -1,0 +1,86 @@
+if (document.getElementById('editarUsuarioForm')) {
+    document.getElementById('tipo_de_usuario').addEventListener('change', (event) => {
+        const tipo = event.target.value;
+        const camposAdicionales = document.getElementById('camposAdicionales');
+        camposAdicionales.innerHTML = ''; // Limpiar campos adicionales
+
+        if (tipo === 'alumno') {
+            camposAdicionales.innerHTML = `
+                <label for="nombres">Nombres:</label>
+                <input type="text" id="nombres" name="nombres" required>
+
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+
+                <label for="expediente">Expediente:</label>
+                <input type="number" id="expediente" name="expediente" required>
+
+                <label for="cedula">Cédula:</label>
+                <input type="number" id="cedula" name="cedula" required>
+
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" pattern="^\\d{11}$" title="El teléfono debe tener 11 dígitos" required>
+
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" required>
+
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" required>
+
+                <label for="semestre">Semestre:</label>
+                <select id="semestre" name="semestre" required>
+                    <option value="">Seleccione...</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+
+                <label for="carrera">Carrera:</label>
+                <select id="carrera" name="carrera" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Ingeniería mecatrónica">Ingeniería mecatrónica</option>
+                    <option value="Ingeniería en equipos ferroviarios">Ingeniería en equipos ferroviarios</option>
+                    <option value="TSU en construcción civil">TSU en construcción civil</option>
+                    <option value="TSU en electricidad">TSU en electricidad</option>
+                    <option value="TSU en mecánica">TSU en mecánica</option>
+                </select>
+            `;
+        } else if (tipo === 'empleado') {
+            camposAdicionales.innerHTML = `
+                <label for="nombres">Nombres:</label>
+                <input type="text" id="nombres" name="nombres" required>
+
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+
+                <label for="cedula">Cédula:</label>
+                <input type="number" id="cedula" name="cedula" required>
+
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" pattern="^\\d{11}$" title="El teléfono debe tener 11 dígitos" required>
+
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" required>
+
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion" required>
+
+                <label for="cargo">Cargo:</label>
+                <select id="cargo" name="cargo" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Administrador">Administrador</option>
+                    <option value="Profesor">Profesor</option>
+                    <option value="Secretario">Secretario</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                </select>
+            `;
+        }
+    });
+}

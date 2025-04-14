@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Alumno</title>
+    <link rel="stylesheet" href="../css/perfil_alumnos.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Bienvenido, Alumno</h1>
+        </header>
+
+        <!-- Sección de botones principales -->
+        <div class="main-buttons">
+            <button onclick="location.href='visualizar_prestamos.html'" class="button">Mis Préstamos</button>
+            <button onclick="location.href='visualizar_libros.html'" class="button">Visualizador de Libros</button>
+        </div>
+
+        <!-- Sección de notificaciones -->
+        <div class="notifications">
+            <h2>Notificaciones</h2>
+            <ul>
+                <li>📅 El libro "El Principito" debe devolverse el 2025-04-15.</li>
+                <li>⚠️ Tienes una multa pendiente de $5 por retraso en la devolución.</li>
+            </ul>
+        </div>
+
+        <!-- Menú inferior -->
+        <nav class="bottom-menu">
+            <button onclick="location.href='visualizar_prestamos.html'">
+                <img src="../icons/loans_icon.png" alt="Préstamos">
+                <span>Préstamos</span>
+            </button>
+            <button onclick="location.href='visualizar_libros.html'">
+                <img src="../icons/books_icon.png" alt="Libros">
+                <span>Libros</span>
+            </button>
+            <button onclick="location.href='perfil_alumnos.html'">
+                <img src="../icons/profile_icon.png" alt="Perfil">
+                <span>Perfil</span>
+            </button>
+        </nav>
+    </div>
+</body>
+</html>

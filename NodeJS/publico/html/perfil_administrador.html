@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Administrador</title>
+    <link rel="stylesheet" href="../css/perfil_administrador.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+            <h2>Administración</h2>
+            <nav>
+                <ul>
+                    <li><button onclick="location.href='registrar_libros.html'">Registrar Libros</button></li>
+                    <li><button onclick="location.href='editar_libros.html'">Editar Libros</button></li>
+                    <li><button onclick="location.href='registrar_prestamos.html'">Registrar Préstamos</button></li>
+                    <li><button onclick="location.href='visualizar_prestamos.html'">Visualizar Préstamos</button></li>
+                    <li><button onclick="location.href='registrar_usuarios.html'">Registrar Alumnos</button></li>
+                    <li><button onclick="location.href='editar_usuarios.html'">Editar Alumnos</button></li>
+                    <li><button onclick="location.href='registrar_empleados.html'">Registrar Empleados</button></li>
+                    <li><button onclick="location.href='editar_empleados.html'">Editar Empleados</button></li>
+                    <li><button onclick="location.href='configuracion_sistema.html'">Configuración del Sistema</button></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <header>
+                <h1>Bienvenido, Administrador</h1>
+            </header>
+
+            <!-- Widgets con estadísticas -->
+            <section class="widgets">
+                <div class="widget">
+                    <h3>Libros Prestados Hoy</h3>
+                    <p>25</p>
+                </div>
+                <div class="widget">
+                    <h3>Préstamos Pendientes</h3>
+                    <p>12</p>
+                </div>
+                <div class="widget">
+                    <h3>Empleados Registrados</h3>
+                    <p>10</p>
+                </div>
+            </section>
+
+            <!-- Panel de auditoría -->
+            <section class="audit-panel">
+                <h2>Auditoría</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Usuario</th>
+                            <th>Acción</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-04-13</td>
+                            <td>Juan Pérez</td>
+                            <td>Editó Libro</td>
+                            <td>"El Principito"</td>
+                        </tr>
+                        <tr>
+                            <td>2025-04-12</td>
+                            <td>María López</td>
+                            <td>Registró Préstamo</td>
+                            <td>"Cien Años de Soledad"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Botones principales -->
+            <section class="actions">
+                <button onclick="location.href='registrar_empleados.html'" class="action-button">Registrar Empleados</button>
+                <button onclick="location.href='editar_empleados.html'" class="action-button">Editar Empleados</button>
+                <button onclick="location.href='configuracion_sistema.html'" class="action-button">Configuración del Sistema</button>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

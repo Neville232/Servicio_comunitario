@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Préstamo</title>
+    <link rel="stylesheet" href="../css/registrar_prestamos.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Registrar Préstamo</h1>
+        <form id="registroPrestamoForm" class="form-stacked">
+            <!-- Menú desplegable para seleccionar el método de registro -->
+            <div class="form-section">
+                <label for="metodoRegistro">Método de Registro:</label>
+                <select id="metodoRegistro" name="metodoRegistro" required>
+                    <option value="">Seleccione...</option>
+                    <option value="rfid">RFID</option>
+                    <option value="expediente">Número de Expediente</option>
+                </select>
+            </div>
+
+            <!-- Campo para RFID del alumno -->
+            <div class="form-section" id="rfidSection" style="display: none;">
+                <label for="rfid">RFID del Alumno:</label>
+                <input type="text" id="rfid" name="rfid" placeholder="Ingrese el RFID del alumno">
+            </div>
+
+            <!-- Campo para Número de Expediente del alumno -->
+            <div class="form-section" id="expedienteSection" style="display: none;">
+                <label for="expediente">Número de Expediente:</label>
+                <input type="number" id="expediente" name="expediente" placeholder="Ingrese el número de expediente">
+            </div>
+
+            <!-- Campo para la cota del libro -->
+            <div class="form-section">
+                <label for="cota">Cota del Libro:</label>
+                <input type="text" id="cota" name="cota" placeholder="Ingrese la cota del libro" required>
+            </div>
+
+            <!-- Campo para el ejemplar del libro -->
+            <div class="form-section">
+                <label for="ejemplar">Ejemplar del Libro:</label>
+                <input type="number" id="ejemplar" name="ejemplar" placeholder="Ingrese el número de ejemplar" required>
+            </div>
+
+            <!-- Campo para la fecha de préstamo -->
+            <div class="form-section">
+                <label for="fechaPrestamo">Fecha de Préstamo:</label>
+                <input type="date" id="fechaPrestamo" name="fechaPrestamo" required>
+            </div>
+
+            <!-- Campo para la fecha de devolución -->
+            <div class="form-section">
+                <label for="fechaDevolucion">Fecha de Devolución:</label>
+                <input type="date" id="fechaDevolucion" name="fechaDevolucion" required>
+            </div>
+        </form>
+        <button type="submit" form="registroPrestamoForm">Registrar Préstamo</button>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        // Mostrar u ocultar campos según el método de registro seleccionado
+        document.getElementById('metodoRegistro').addEventListener('change', function () {
+            const metodo = this.value;
+            const rfidSection = document.getElementById('rfidSection');
+            const expedienteSection = document.getElementById('expedienteSection');
+
+            if (metodo === 'rfid') {
+                rfidSection.style.display = 'block';
+                expedienteSection.style.display = 'none';
+            } else if (metodo === 'expediente') {
+                rfidSection.style.display = 'none';
+                expedienteSection.style.display = 'block';
+            } else {
+                rfidSection.style.display = 'none';
+                expedienteSection.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
