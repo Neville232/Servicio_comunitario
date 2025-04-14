@@ -16,6 +16,7 @@ if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || 
     process.exit(1);
 }
 
+
 // Ruta para el login
 app.post('/login', async (req, res) => {
     try {
@@ -84,6 +85,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
 // Ruta para registrar usuarios
 app.post('/registro', async (req, res) => {
     const conn = await pool.getConnection(); // Obtener conexión al inicio
@@ -144,6 +146,99 @@ app.post('/registro', async (req, res) => {
     } catch (err) {
         console.error('Error en el registro:', err.message);
         await conn.rollback(); // Revertir cambios en caso de error
+        conn.release();
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+// Ruta para consultar usuario por Cédula
+app.get('/consultar-usuario', async (req, res) => {
+    const { cedula } = req.query;
+
+    if (!cedula) {
+        return res.status(400).json({ error: 'Debe proporcionar la Cédula para la consulta.' });
+    }
+
+    const conn = await pool.getConnection();
+    try {
+        // Consulta para buscar en las tablas alumnos y empleados
+        const query = `
+            SELECT u.*, a.nombres, a.apellidos, a.expediente, a.telefono, a.correo, a.direccion, a.semestre, a.carrera, e.cargo
+            FROM usuarios u
+            LEFT JOIN alumnos a ON u.usuarios_id = a.usuarios_id
+            LEFT JOIN empleados e ON u.usuarios_id = e.usuarios_id
+            WHERE a.cedula = ? OR e.cedula = ?`;
+        const params = [cedula, cedula];
+
+        // Ejecutar la consulta
+        const rows = await conn.query(query, params);
+
+        if (rows.length === 0) {
+            conn.release();
+            return res.status(404).json({ error: 'No se encontraron datos para el usuario.' });
+        }
+
+        conn.release();
+        res.json(rows[0]); // Enviar el primer resultado
+    } catch (err) {
+        console.error('Error al consultar usuario:', err.message);
+        conn.release();
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+
+// Ruta para editar usuarios
+app.put('/editar-usuario/:cedula', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        const { cedula } = req.params;
+        const {
+            nombres, apellidos, expediente, telefono, correo, direccion,
+            semestre, carrera, cargo, tipo_de_usuario
+        } = req.body;
+
+        // Validar datos básicos
+        if (!nombres || !apellidos || !cedula || !telefono || !correo || !direccion) {
+            conn.release();
+            return res.status(400).json({ error: 'Todos los campos básicos son requeridos.' });
+        }
+
+        // Iniciar transacción
+        await conn.beginTransaction();
+
+        // Actualizar en la tabla correspondiente
+        if (tipo_de_usuario === 'alumno') {
+            if (!expediente || !semestre || !carrera) {
+                conn.release();
+                return res.status(400).json({ error: 'Expediente, semestre y carrera son requeridos para alumnos.' });
+            }
+            await conn.query(
+                "UPDATE alumnos SET nombres = ?, apellidos = ?, expediente = ?, telefono = ?, correo = ?, direccion = ?, semestre = ?, carrera = ? WHERE cedula = ?",
+                [nombres, apellidos, expediente, telefono, correo, direccion, semestre, carrera, cedula]
+            );
+        } else if (tipo_de_usuario === 'empleado') {
+            if (!cargo) {
+                conn.release();
+                return res.status(400).json({ error: 'Cargo es requerido para empleados.' });
+            }
+            await conn.query(
+                "UPDATE empleados SET nombres = ?, apellidos = ?, telefono = ?, correo = ?, direccion = ?, cargo = ? WHERE cedula = ?",
+                [nombres, apellidos, telefono, correo, direccion, cargo, cedula]
+            );
+        } else {
+            conn.release();
+            return res.status(400).json({ error: 'Tipo de usuario inválido.' });
+        }
+
+        // Confirmar transacción
+        await conn.commit();
+        conn.release();
+        res.json({ success: true, message: 'Usuario actualizado exitosamente.' });
+    } catch (err) {
+        console.error('Error al editar usuario:', err.message);
+        await conn.rollback();
         conn.release();
         res.status(500).json({ error: 'Error interno del servidor.' });
     }

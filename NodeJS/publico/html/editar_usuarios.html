@@ -10,17 +10,8 @@
     <div class="form-container">
         <h1>Editar Usuario</h1>
         <form id="editarUsuarioForm" class="form-stacked">
-            <!-- Todos los elementos en un solo flujo vertical -->
+            <!-- Menú desplegable para seleccionar el tipo de usuario -->
             <div class="form-section">
-                <label for="usuario">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" required>
-
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required>
-
-                <label for="rfid">RFID:</label>
-                <input type="number" id="rfid" name="rfid" required>
-
                 <label for="tipo_de_usuario">Tipo de Usuario:</label>
                 <select id="tipo_de_usuario" name="tipo_de_usuario" required>
                     <option value="">Seleccione...</option>
@@ -29,9 +20,22 @@
                 </select>
             </div>
 
+            <!-- Campo para Cédula -->
+            <div class="form-section">
+                <label for="cedula">Cédula:</label>
+                <input type="number" id="cedula" name="cedula" placeholder="Ingrese la cédula del usuario" required>
+            </div>
+
+            <!-- Botón para consultar datos -->
+            <div class="form-section">
+                <button type="button" id="consultarBtn">Consultar Usuario</button>
+            </div>
+
             <!-- Sección de campos adicionales -->
             <div id="camposAdicionales" class="form-section"></div>
         </form>
+
+        <!-- Botón para guardar cambios -->
         <button type="submit" form="editarUsuarioForm">Guardar Cambios</button>
         <div id="resultado"></div>
     </div>
