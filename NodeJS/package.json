@@ -10,10 +10,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "9---servicio-comunitario": "file:",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "mariadb": "^3.4.1",
+    "socket.io": "^4.8.1",
     "ws": "^8.18.1"
   }
 }

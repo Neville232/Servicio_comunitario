@@ -2,13 +2,22 @@ require('dotenv').config();
 const express = require('express');
 const pool = require('./database');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express(); // Inicializa la aplicación Express
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
+// Middlewares
 app.use(express.json()); // Middleware para manejar JSON
 app.use(cors()); // Middleware para habilitar CORS
-
-// Servir la carpeta "publico"
-app.use(express.static('publico'));
+app.use(express.static('publico')); // Servir archivos estáticos
 
 // Validar variables de entorno
 if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
@@ -16,31 +25,34 @@ if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || 
     process.exit(1);
 }
 
+// Función para notificar cambios en los libros
+function notifyBookChanges() {
+    io.emit('books_updated');
+    console.log('Notificando cambios en los libros a los clientes');
+}
+
+// ================== RUTAS DE USUARIOS ================== //
 
 // Ruta para el login
 app.post('/login', async (req, res) => {
     try {
         const { usuario, contrasena } = req.body;
 
-        // Validar que se envíen los datos necesarios
         if (!usuario || !contrasena) {
             return res.status(400).json({ error: 'Usuario y contraseña son requeridos.' });
         }
 
-        // Consultar la base de datos para verificar las credenciales
         const conn = await pool.getConnection();
         const rows = await conn.query(
             "SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?",
             [usuario, contrasena]
         );
 
-        // Verificar si se encontró un usuario
         if (rows.length > 0) {
             const user = rows[0];
             let nombres = '';
             let apellidos = '';
 
-            // Obtener nombres y apellidos dependiendo del tipo de usuario
             if (user.tipo_de_usuario === 'alumno') {
                 const alumnoData = await conn.query(
                     "SELECT nombres, apellidos FROM alumnos WHERE usuarios_id = ?",
@@ -62,8 +74,6 @@ app.post('/login', async (req, res) => {
             }
 
             conn.release();
-
-            // Responder con éxito e incluir nombres y apellidos
             res.json({
                 success: true,
                 message: `Inicio de sesión exitoso. Bienvenido, ${nombres} ${apellidos}.`,
@@ -85,10 +95,9 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
 // Ruta para registrar usuarios
 app.post('/registro', async (req, res) => {
-    const conn = await pool.getConnection(); // Obtener conexión al inicio
+    const conn = await pool.getConnection();
     try {
         const {
             usuario, contrasena, rfid, tipo_de_usuario,
@@ -96,23 +105,19 @@ app.post('/registro', async (req, res) => {
             semestre, carrera, cargo
         } = req.body;
 
-        // Validar datos básicos
         if (!usuario || !contrasena || !rfid || !tipo_de_usuario || !nombres || !apellidos || !cedula || !telefono || !correo || !direccion) {
             conn.release();
             return res.status(400).json({ error: 'Todos los campos básicos son requeridos.' });
         }
 
-        // Iniciar transacción
         await conn.beginTransaction();
 
-        // Verificar si el RFID ya existe
         const rfidCheck = await conn.query("SELECT * FROM usuarios WHERE rfid = ?", [rfid]);
         if (rfidCheck.length > 0) {
             conn.release();
             return res.status(400).json({ error: 'El RFID ya está registrado.' });
         }
 
-        // Insertar en la tabla usuarios
         const result = await conn.query(
             "INSERT INTO usuarios (usuario, contrasena, rfid, tipo_de_usuario) VALUES (?, ?, ?, ?)",
             [usuario, contrasena, rfid, tipo_de_usuario]
@@ -120,7 +125,6 @@ app.post('/registro', async (req, res) => {
 
         const usuarios_id = result.insertId;
 
-        // Insertar en la tabla correspondiente
         if (tipo_de_usuario === 'alumno') {
             if (!expediente || !semestre || !carrera) {
                 throw new Error('Expediente, semestre y carrera son requeridos para alumnos.');
@@ -139,18 +143,16 @@ app.post('/registro', async (req, res) => {
             );
         }
 
-        // Confirmar transacción
         await conn.commit();
         conn.release();
         res.json({ success: true, message: 'Usuario registrado exitosamente.' });
     } catch (err) {
         console.error('Error en el registro:', err.message);
-        await conn.rollback(); // Revertir cambios en caso de error
+        await conn.rollback();
         conn.release();
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
-
 
 // Ruta para consultar usuario por Cédula
 app.get('/consultar-usuario', async (req, res) => {
@@ -162,7 +164,6 @@ app.get('/consultar-usuario', async (req, res) => {
 
     const conn = await pool.getConnection();
     try {
-        // Consulta para buscar en las tablas alumnos y empleados
         const query = `
             SELECT u.*, a.nombres, a.apellidos, a.expediente, a.telefono, a.correo, a.direccion, a.semestre, a.carrera, e.cargo
             FROM usuarios u
@@ -171,7 +172,6 @@ app.get('/consultar-usuario', async (req, res) => {
             WHERE a.cedula = ? OR e.cedula = ?`;
         const params = [cedula, cedula];
 
-        // Ejecutar la consulta
         const rows = await conn.query(query, params);
 
         if (rows.length === 0) {
@@ -180,14 +180,13 @@ app.get('/consultar-usuario', async (req, res) => {
         }
 
         conn.release();
-        res.json(rows[0]); // Enviar el primer resultado
+        res.json(rows[0]);
     } catch (err) {
         console.error('Error al consultar usuario:', err.message);
         conn.release();
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
 });
-
 
 // Ruta para editar usuarios
 app.put('/editar-usuario/:cedula', async (req, res) => {
@@ -199,16 +198,13 @@ app.put('/editar-usuario/:cedula', async (req, res) => {
             semestre, carrera, cargo, tipo_de_usuario
         } = req.body;
 
-        // Validar datos básicos
         if (!nombres || !apellidos || !cedula || !telefono || !correo || !direccion) {
             conn.release();
             return res.status(400).json({ error: 'Todos los campos básicos son requeridos.' });
         }
 
-        // Iniciar transacción
         await conn.beginTransaction();
 
-        // Actualizar en la tabla correspondiente
         if (tipo_de_usuario === 'alumno') {
             if (!expediente || !semestre || !carrera) {
                 conn.release();
@@ -232,7 +228,6 @@ app.put('/editar-usuario/:cedula', async (req, res) => {
             return res.status(400).json({ error: 'Tipo de usuario inválido.' });
         }
 
-        // Confirmar transacción
         await conn.commit();
         conn.release();
         res.json({ success: true, message: 'Usuario actualizado exitosamente.' });
@@ -244,8 +239,75 @@ app.put('/editar-usuario/:cedula', async (req, res) => {
     }
 });
 
+// ================== RUTAS DE LIBROS ================== //
+
+// Ruta para registrar un nuevo libro
+app.post('/registrar-libro', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        const { titulo, autores, materia, edicion, cota, ejemplar, disponible } = req.body;
+
+        if (!titulo || !autores || !materia || !edicion || !cota || !ejemplar) {
+            conn.release();
+            return res.status(400).json({ error: 'Todos los campos son requeridos.' });
+        }
+
+        const query = `
+            INSERT INTO libros (titulo, autores, materia, edicion, cota, ejemplar, disponible)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+        const params = [titulo, autores, materia, edicion, cota, ejemplar, disponible || 1];
+        await conn.query(query, params);
+
+        conn.release();
+        notifyBookChanges(); // Notificar a los clientes sobre el cambio
+        res.json({ success: true, message: 'Libro registrado exitosamente.' });
+    } catch (err) {
+        console.error('Error al registrar libro:', err.message);
+        conn.release();
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+});
+
+// Ruta para obtener todos los libros
+app.get('/libros', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        const query = `
+            SELECT 
+                titulo, 
+                autores as autor, 
+                materia, 
+                edicion, 
+                cota, 
+                ejemplar, 
+                CASE 
+                    WHEN disponible = 1 THEN 'Disponible' 
+                    ELSE 'No Disponible' 
+                END as disponibilidad 
+            FROM libros
+        `;
+        const rows = await conn.query(query);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error al obtener libros:', err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    } finally {
+        conn.release();
+    }
+});
+
+// Configuración de Socket.io
+io.on('connection', (socket) => {
+    console.log('Nuevo cliente conectado:', socket.id);
+    
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado:', socket.id);
+    });
+});
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
