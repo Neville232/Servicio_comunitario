@@ -10,15 +10,25 @@ body {
     align-items: flex-start;
 }
 
-/* Contenedor principal del formulario */
+/* Contenedor principal para alinear los formularios */
+.container {
+    display: flex;
+    width: 80%;
+    gap: 20px;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Permite que los contenedores se ajusten en pantallas pequeñas */
+}
+
+/* Contenedor individual del formulario */
 .form-container {
-    width: 100%;
-    max-width: 500px;
+    flex: 1;
+    max-width: 30%; /* Cada contenedor ocupa un tercio del ancho */
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
+    margin: 10px 0;
+    box-sizing: border-box;
 }
 
 /* Título */
@@ -83,4 +93,15 @@ button:hover {
     font-size: 14px;
     color: #333;
     text-align: center;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Los contenedores se apilan en pantallas pequeñas */
+    }
+
+    .form-container {
+        max-width: 100%; /* Cada contenedor ocupa el ancho completo */
+    }
 }

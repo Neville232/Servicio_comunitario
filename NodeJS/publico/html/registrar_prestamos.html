@@ -7,77 +7,94 @@
     <link rel="stylesheet" href="../css/registrar_prestamos.css">
 </head>
 <body>
-    <div class="form-container">
-        <h1>Registrar Préstamo</h1>
-        <form id="registroPrestamoForm" class="form-stacked">
-            <!-- Menú desplegable para seleccionar el método de registro -->
-            <div class="form-section">
-                <label for="metodoRegistro">Método de Registro:</label>
-                <select id="metodoRegistro" name="metodoRegistro" required>
-                    <option value="">Seleccione...</option>
-                    <option value="rfid">RFID</option>
-                    <option value="expediente">Número de Expediente</option>
-                </select>
-            </div>
+    <div class="container">
+        <!-- Contenedor 1: Formulario para registrar préstamo -->
+        <div class="form-container">
+            <h1>Registrar Préstamo</h1>
+            <form id="registroPrestamoForm" class="form-stacked">
+                <!-- Menú desplegable para seleccionar el método de registro -->
+                <div class="form-section">
+                    <label for="metodoRegistro">Método de Registro:</label>
+                    <select id="metodoRegistro" name="metodoRegistro" required>
+                        <option value="">Seleccione...</option>
+                        <option value="rfid">RFID</option>
+                        <option value="expediente">Número de Expediente</option>
+                    </select>
+                </div>
 
-            <!-- Campo para RFID del alumno -->
-            <div class="form-section" id="rfidSection" style="display: none;">
-                <label for="rfid">RFID del Alumno:</label>
-                <input type="text" id="rfid" name="rfid" placeholder="Ingrese el RFID del alumno">
-            </div>
+                <!-- Campo para RFID del alumno -->
+                <div class="form-section" id="rfidSection" style="display: none;">
+                    <label for="rfid">RFID del Alumno:</label>
+                    <input type="text" id="rfid" name="rfid" placeholder="Ingrese el RFID del alumno">
+                </div>
 
-            <!-- Campo para Número de Expediente del alumno -->
-            <div class="form-section" id="expedienteSection" style="display: none;">
-                <label for="expediente">Número de Expediente:</label>
-                <input type="number" id="expediente" name="expediente" placeholder="Ingrese el número de expediente">
-            </div>
+                <!-- Campo para Número de Expediente del alumno -->
+                <div class="form-section" id="expedienteSection" style="display: none;">
+                    <label for="expediente">Número de Expediente:</label>
+                    <input type="number" id="expediente" name="expediente" placeholder="Ingrese el número de expediente">
+                </div>
 
-            <!-- Campo para la cota del libro -->
-            <div class="form-section">
-                <label for="cota">Cota del Libro:</label>
-                <input type="text" id="cota" name="cota" placeholder="Ingrese la cota del libro" required>
-            </div>
+                <!-- Campo para la cota del libro -->
+                <div class="form-section">
+                    <label for="cota">Cota del Libro:</label>
+                    <input type="text" id="cota" name="cota" placeholder="Ingrese la cota del libro" required>
+                </div>
 
-            <!-- Campo para el ejemplar del libro -->
-            <div class="form-section">
-                <label for="ejemplar">Ejemplar del Libro:</label>
-                <input type="number" id="ejemplar" name="ejemplar" placeholder="Ingrese el número de ejemplar" required>
-            </div>
+                <!-- Campo para el ejemplar del libro -->
+                <div class="form-section">
+                    <label for="ejemplar">Ejemplar del Libro:</label>
+                    <input type="number" id="ejemplar" name="ejemplar" placeholder="Ingrese el número de ejemplar" required>
+                </div>
 
-            <!-- Campo para la fecha de préstamo -->
-            <div class="form-section">
-                <label for="fechaPrestamo">Fecha de Préstamo:</label>
-                <input type="date" id="fechaPrestamo" name="fechaPrestamo" required>
-            </div>
+                <!-- Campo para la fecha de préstamo -->
+                <div class="form-section">
+                    <label for="fechaPrestamo">Fecha de Préstamo:</label>
+                    <input type="date" id="fechaPrestamo" name="fechaPrestamo" readonly required>
+                </div>
 
-            <!-- Campo para la fecha de devolución -->
-            <div class="form-section">
-                <label for="fechaDevolucion">Fecha de Devolución:</label>
-                <input type="date" id="fechaDevolucion" name="fechaDevolucion" required>
+                <!-- Campo para la fecha de devolución -->
+                <div class="form-section">
+                    <label for="fechaDevolucion">Fecha de Devolución:</label>
+                    <input type="date" id="fechaDevolucion" name="fechaDevolucion" required>
+                </div>
+            </form>
+            <button type="submit" form="registroPrestamoForm">Registrar Préstamo</button>
+            <div id="resultado"></div>
+        </div>
+
+        <!-- Contenedor 2: Datos del estudiante -->
+        <div class="form-container">
+            <h1>Datos del Estudiante</h1>
+            <div id="datosEstudiante">
+                <p><strong>ID del Alumno:</strong> <span id="alumnosId">-</span></p>
+                <p><strong>Nombre:</strong> <span id="nombreEstudiante">-</span></p>
+                <p><strong>Apellidos:</strong> <span id="apellidosEstudiante">-</span></p>
+                <p><strong>Cédula:</strong> <span id="cedulaEstudiante">-</span></p>
+                <p><strong>Expediente:</strong> <span id="expedienteEstudiante">-</span></p>
+                <p><strong>Teléfono:</strong> <span id="telefonoEstudiante">-</span></p>
+                <p><strong>Correo:</strong> <span id="correoEstudiante">-</span></p>
+                <p><strong>Carrera:</strong> <span id="carreraEstudiante">-</span></p>
+                <p><strong>Semestre:</strong> <span id="semestreEstudiante">-</span></p>
             </div>
-        </form>
-        <button type="submit" form="registroPrestamoForm">Registrar Préstamo</button>
-        <div id="resultado"></div>
+        </div>
+
+        <!-- Contenedor 3: Datos del libro -->
+        <div class="form-container">
+            <h1>Datos del Libro</h1>
+            <div id="datosLibro">
+                <p><strong>ID del Libro:</strong> <span id="librosId">-</span></p>
+                <p><strong>Título:</strong> <span id="tituloLibro">-</span></p>
+                <p><strong>Autor:</strong> <span id="autorLibro">-</span></p>
+                <p><strong>Materia:</strong> <span id="materiaLibro">-</span></p>
+                <p><strong>Edición:</strong> <span id="edicionLibro">-</span></p>
+                <p><strong>Cota:</strong> <span id="cotaLibro">-</span></p>
+                <p><strong>Ejemplar:</strong> <span id="ejemplarLibro">-</span></p>
+                <p><strong>Disponibilidad:</strong> <span id="disponibilidadLibro">-</span></p>
+            </div>
+        </div>
+        
     </div>
-
-    <script>
-        // Mostrar u ocultar campos según el método de registro seleccionado
-        document.getElementById('metodoRegistro').addEventListener('change', function () {
-            const metodo = this.value;
-            const rfidSection = document.getElementById('rfidSection');
-            const expedienteSection = document.getElementById('expedienteSection');
-
-            if (metodo === 'rfid') {
-                rfidSection.style.display = 'block';
-                expedienteSection.style.display = 'none';
-            } else if (metodo === 'expediente') {
-                rfidSection.style.display = 'none';
-                expedienteSection.style.display = 'block';
-            } else {
-                rfidSection.style.display = 'none';
-                expedienteSection.style.display = 'none';
-            }
-        });
-    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/registrar_prestamos.js"></script>
 </body>
 </html>

@@ -300,10 +300,136 @@ app.get('/libros', async (req, res) => {
 // Configuración de Socket.io
 io.on('connection', (socket) => {
     console.log('Nuevo cliente conectado:', socket.id);
+
+    // Escuchar evento para obtener datos del estudiante
+        socket.on('obtener-datos-estudiante', async (data) => {
+        const { rfid, expediente } = data;
     
+        if (!rfid && !expediente) {
+            socket.emit('error-datos-estudiante', { error: 'Debe proporcionar RFID o número de expediente.' });
+            return;
+        }
+    
+        const conn = await pool.getConnection();
+        try {
+            let query = '';
+            let params = [];
+    
+            if (rfid) {
+                query = `
+                    SELECT alumnos_id, nombres, apellidos, cedula, expediente, telefono, correo, carrera, semestre
+                    FROM alumnos
+                    WHERE rfid = ?
+                `;
+                params = [rfid];
+            } else if (expediente) {
+                query = `
+                    SELECT alumnos_id, nombres, apellidos, cedula, expediente, telefono, correo, carrera, semestre
+                    FROM alumnos
+                    WHERE expediente = ?
+                `;
+                params = [expediente];
+            }
+    
+            const rows = await conn.query(query, params);
+    
+            if (rows.length === 0) {
+                socket.emit('error-datos-estudiante', { error: 'No se encontraron datos para el estudiante.' });
+            } else {
+                socket.emit('datos-estudiante', rows[0]); // Enviar los datos del estudiante al cliente
+            }
+        } catch (err) {
+            console.error('Error al obtener datos del estudiante:', err.message);
+            socket.emit('error-datos-estudiante', { error: 'Error interno del servidor.' });
+        } finally {
+            conn.release();
+        }
+    });
+
+    // Escuchar evento para obtener datos del libro
+        socket.on('obtener-datos-libro', async (data) => {
+        const { cota, ejemplar } = data;
+    
+        if (!cota || !ejemplar) {
+            socket.emit('error-datos-libro', { error: 'Debe proporcionar la cota y el ejemplar del libro.' });
+            return;
+        }
+    
+        const conn = await pool.getConnection();
+        try {
+            const query = `
+                SELECT libros_id, titulo, autores AS autor, materia, edicion, cota, ejemplar, 
+                       CASE 
+                           WHEN disponible = 1 THEN 'Disponible' 
+                           ELSE 'No Disponible' 
+                       END AS disponibilidad
+                FROM libros
+                WHERE cota = ? AND ejemplar = ?
+            `;
+            const params = [cota, ejemplar];
+            const rows = await conn.query(query, params);
+    
+            if (rows.length === 0) {
+                socket.emit('error-datos-libro', { error: 'No se encontraron datos para el libro.' });
+            } else {
+                socket.emit('datos-libro', rows[0]); // Enviar los datos del libro al cliente
+            }
+        } catch (err) {
+            console.error('Error al obtener datos del libro:', err.message);
+            socket.emit('error-datos-libro', { error: 'Error interno del servidor.' });
+        } finally {
+            conn.release();
+        }
+    });
+
     socket.on('disconnect', () => {
         console.log('Cliente desconectado:', socket.id);
     });
+});
+
+// Ruta para registrar un préstamo
+app.post('/registrar-prestamo', async (req, res) => {
+    console.log('Datos recibidos:', req.body); // Depuración
+    const { alumnos_id, libros_id, fecha_retiro, fecha_entrega } = req.body;
+
+    if (!alumnos_id || !libros_id || !fecha_retiro || !fecha_entrega) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
+    const conn = await pool.getConnection();
+    try {
+        // Verificar si el libro existe y está disponible
+        const [libro] = await conn.query(
+            'SELECT disponible FROM libros WHERE libros_id = ?',
+            [libros_id]
+        );
+
+        console.log('Libro encontrado:', libro); // Depuración
+
+        if (!libro) {
+            return res.status(400).json({ error: 'El libro no existe.' });
+        }
+
+        if (libro.disponible !== 1) {
+            return res.status(400).json({ error: 'El libro no está disponible.' });
+        }
+
+        // Registrar el préstamo
+        await conn.query(
+            'INSERT INTO prestamos (alumnos_id, libros_id, fecha_retiro, fecha_entrega) VALUES (?, ?, ?, ?)',
+            [alumnos_id, libros_id, fecha_retiro, fecha_entrega]
+        );
+
+        // Actualizar la disponibilidad del libro a "No Disponible"
+        await conn.query('UPDATE libros SET disponible = 0 WHERE libros_id = ?', [libros_id]);
+
+        res.json({ message: 'Préstamo registrado exitosamente.' });
+    } catch (err) {
+        console.error('Error al registrar el préstamo:', err.message);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    } finally {
+        conn.release();
+    }
 });
 
 // Iniciar el servidor
