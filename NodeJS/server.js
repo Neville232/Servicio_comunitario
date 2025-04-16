@@ -432,6 +432,41 @@ app.post('/registrar-prestamo', async (req, res) => {
     }
 });
 
+
+// Ruta para obtener todos los préstamos
+app.get('/prestamos', async (req, res) => {
+    const conn = await pool.getConnection();
+    try {
+        const query = `
+            SELECT 
+                p.prestamos_id,
+                a.nombres AS alumno_nombre,
+                a.apellidos AS alumno_apellido,
+                a.expediente AS alumno_expediente,
+                a.telefono AS alumno_telefono,
+                a.correo AS alumno_correo,
+                a.semestre AS alumno_semestre,
+                l.titulo AS libro_titulo,
+                l.autores AS libro_autores,
+                l.cota AS libro_cota,
+                l.ejemplar AS libro_ejemplar,
+                p.fecha_retiro,
+                p.fecha_entrega
+            FROM prestamos p
+            INNER JOIN alumnos a ON p.alumnos_id = a.alumnos_id
+            INNER JOIN libros l ON p.libros_id = l.libros_id
+        `;
+        const rows = await conn.query(query);
+        res.json(rows);
+    } catch (err) {
+        console.error('Error al obtener los préstamos:', err.message);
+        res.status(500).json({ error: 'Error interno del servidor.' });
+    } finally {
+        conn.release();
+    }
+});
+
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

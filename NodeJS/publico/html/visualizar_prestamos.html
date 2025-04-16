@@ -12,50 +12,14 @@
         
         <!-- Barra de búsqueda -->
         <input type="text" id="searchBar" placeholder="Buscar por alumno, libro o fechas..." class="search-bar">
-
+    
+        <!-- Contenedor para las cards -->
         <div class="card-container">
-            <!-- Ejemplo de Card -->
-            <div class="card">
-                <h2>Alumno: Juan Pérez</h2>
-                <p><strong>RFID:</strong> 123456789</p>
-                <p><strong>Expediente:</strong> 20210001</p>
-                <p><strong>Libro:</strong> El Principito</p>
-                <p><strong>Cota:</strong> LIT-001</p>
-                <p><strong>Ejemplar:</strong> 3</p>
-                <p><strong>Fecha de Préstamo:</strong> 2025-04-01</p>
-                <p><strong>Fecha de Devolución:</strong> 2025-04-15</p>
-            </div>
-            <!-- Más cards se generarán dinámicamente -->
+            <!-- Las cards se generarán dinámicamente aquí -->
         </div>
     </div>
 
-    <script>
-        // Función para eliminar tildes y normalizar texto
-        function normalizeText(text) {
-            return text
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, ""); // Elimina los acentos
-        }
+    <script src="../js/visualizar_prestamos.js"></script>
 
-        // Función para filtrar las cards
-        document.getElementById('searchBar').addEventListener('input', function () {
-            const searchTerm = normalizeText(this.value);
-            const cards = document.querySelectorAll('.card');
-
-            cards.forEach(card => {
-                const alumno = normalizeText(card.querySelector('h2').textContent);
-                const rfid = normalizeText(card.querySelector('p:nth-of-type(1)').textContent);
-                const expediente = normalizeText(card.querySelector('p:nth-of-type(2)').textContent);
-                const libro = normalizeText(card.querySelector('p:nth-of-type(3)').textContent);
-
-                if (alumno.includes(searchTerm) || rfid.includes(searchTerm) || expediente.includes(searchTerm) || libro.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>
